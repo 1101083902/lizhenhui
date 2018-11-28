@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="UserInfoMana"
+  id="myeclipse.1542858702554"
+  context-root="/UserInfoMana"
+  j2ee-spec="6.0"
+  archive="UserInfoMana.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

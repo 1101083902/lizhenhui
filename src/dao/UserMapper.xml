@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserMapper">
+     <select id="find" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `tb_userinfo` WHERE  `userAccoun` =  #{userAccoun}
+     </select>
+      
+     <select id="finduser" resultType="pojo.tb_userinfo">
+        select * from tb_userinfo where userAccoun = #{userAccoun}
+     </select>
+
+    <select id="login" resultType="pojo.tb_userinfo">
+       select * from tb_userinfo where userAccoun = #{userAccoun}
+         and `password` = #{password}
+    </select>
+    
+      <select id="listDepartment" resultType="pojo.tb_department">
+         select * from tb_department
+     </select>
+     
+     
+     <resultMap type="pojo.tb_userinfo" id="list" autoMapping="true">
+       <id property="userid" column="userid"/>
+       <association property="department" javaType="pojo.tb_department">
+       <id property="deptid" column="deptid"/>
+       <result property="deptname" column="deptname"/>
+       </association>
+     </resultMap>
+     
+     <select id="listUserInfo" resultMap="list">
+        select * from tb_userinfo u,tb_department d
+         where u.deptid = d.deptid
+           <if test="userAccoun != null and userAccoun != ''">
+          and userAccoun like CONCAT('%',#{userAccoun},'%') 
+           </if>
+           <if test="deptid>0">
+              and u.deptid = #{deptid}
+           </if>
+              limit #{pageNum},#{pageSize}
+     </select>
+     
+     
+     <select id="total" resultType="int">
+        select count(*) from tb_userinfo u,tb_department d where u.deptId = d.deptid
+           <if test="userAccoun != null and userAccoun != ''">
+               and userAccoun like CONCAT('%',#{userAccoun},'%') 
+           </if>
+           <if test="deptid>0">
+              and u.deptid = #{deptid}
+           </if>
+     </select>
+     
+      <select id="selUserInfo" resultType="pojo.tb_userinfo">
+       select * from tb_userinfo where userid = #{userid}
+     </select>
+     
+    <update id="userup" parameterType="pojo.tb_userinfo">
+   UPDATE `tb_userinfo`
+   SET `password` = #{password},
+  `email` = #{email},
+  `deptid` = #{deptid}
+   WHERE `userid`= #{userid};
+     </update>
+     
+ <update id="updata" parameterType="pojo.tb_userinfo">
+   UPDATE `tb_userinfo`
+   SET `deifiag` = 1
+   WHERE `userid`= #{userid};
+     </update>
+       
+       
+     <insert id="insert" parameterType="int">
+     insert into tb_userinfo(userAccoun,password,email,deptid,createDate,deifiag,photo)
+       values(#{userAccoun},#{password},#{email},#{deptid},now(),0,#{photo})
+     </insert>
+   
+</mapper>
